@@ -6,14 +6,15 @@ const ESPACIOS = /\S/
 const rateLimit = require('express-rate-limit');
 const apiLimiter = rateLimit({
     //windowMs: 5 * 60 * 1000, //duración de la ventana de tiempo
-    max: 1 //peticiones por up dentro de la ventana de tiempo
+    max: 1, //peticiones por up dentro de la ventana de tiempo
+    message: {"response": 2, "data": "error", "message": "A excedido el numero de peticiones al servicio web"}
 });
 
 module.exports = (app) => {
 
     /* Ruta de registro de usuario */
     app.post(`${PATH}/usuario`, apiLimiter, (request, respond) => {
-        console.log(app)
+        console.log(apiLimiter)
         let params = request.body.param 
         const longTelefono = /^\d{10}$/
         /* Validacion de parametros */
