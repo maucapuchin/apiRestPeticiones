@@ -5,15 +5,15 @@ const ESPACIOS = /\S/
 
 const rateLimit = require('express-rate-limit');
 const apiLimiter = rateLimit({
-    windowMs: 5 * 60 * 1000, //duración de la ventana de tiempo
+    //windowMs: 5 * 60 * 1000, //duración de la ventana de tiempo
     max: 1 //peticiones por up dentro de la ventana de tiempo
 });
 
 module.exports = (app) => {
-    app.set("trust proxy", true); 
 
     /* Ruta de registro de usuario */
     app.post(`${PATH}/usuario`, apiLimiter, (request, respond) => {
+        console.log(app)
         let params = request.body.param 
         const longTelefono = /^\d{10}$/
         /* Validacion de parametros */
