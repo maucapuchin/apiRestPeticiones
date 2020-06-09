@@ -55,9 +55,6 @@ function procesoRegistroUsuario(params, conexion){
                     reject({"response": 2, "data": "error", "message": "El correo ya se encuentra registrado"})
                 }
                 insertarUsuario(params, conexion).then((resultado) => {
-                    if (Object.keys(resultado).length != 0) {
-                        reject({"response": 2, "data": "error", "message": "El correo ya se encuentra registrado"})
-                    }
                     
                     resolve({"response": 1, "data": resultado, "message": "Peticion realizada exitosamente"})
                 }).catch((error) => {

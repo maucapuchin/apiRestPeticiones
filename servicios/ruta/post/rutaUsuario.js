@@ -3,10 +3,17 @@ const view = require('../../../vista/viewUsuario')
 const PATH = '/registro'
 const ESPACIOS = /\S/
 
+const rateLimit = require('express-rate-limit');
+const apiLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000, //duración de la ventana de tiempo
+    max: 1 //peticiones por up dentro de la ventana de tiempo
+});
 
 module.exports = (app) => {
+    app.set("trust proxy", true); 
+
     /* Ruta de registro de usuario */
-    app.post(`${PATH}/usuario`, (request, respond) => {
+    app.post(`${PATH}/usuario`, apiLimiter, (request, respond) => {
         let params = request.body.param 
         const longTelefono = /^\d{10}$/
         /* Validacion de parametros */
@@ -22,6 +29,7 @@ module.exports = (app) => {
                     (params.correo != undefined && ESPACIOS.test(params.correo)) &&
                     (params.tipousuario_id != undefined && ESPACIOS.test(params.tipousuario_id))) {
                     if (longTelefono.test(params.telefono)) {
+                        console.log(params.telefono)
                         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(params.correo)) {
                             view.registrarUsuario((params), request, respond) 
                         } else {
